@@ -10,11 +10,11 @@ import { Separator } from "@/components/ui/separator";
 import { currentUser } from "@clerk/nextjs/server";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import React, { ReactNode } from "react";
+import React from "react";
 import Logo from "../../components/Logo";
 import { CurrencyComboBox } from "../../components/CurrencyComboBox";
 
-async function page({ children }: { children: ReactNode }) {
+async function page() {
   const user = await currentUser();
   if (!user) {
     redirect("/sign-in");
