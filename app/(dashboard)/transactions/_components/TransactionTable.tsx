@@ -19,6 +19,7 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -178,6 +179,14 @@ function TransactionTable({ from, to }: Props) {
     return Array.from(uniqueCategories);
   }, [history.data]);
 
+  const total = useMemo(() => {
+    const sum = history.data?.reduce((acc, curr) => {
+      if (curr.type === "income") return acc + curr.amount;
+      else return acc - curr.amount;
+    }, 0);
+    return sum;
+  }, [history.data]);
+
   return (
     <div className='w-full'>
       <div className='flex flex-wrap items-end justify-between gap-2 py-4'>
@@ -273,8 +282,20 @@ function TransactionTable({ from, to }: Props) {
                 </TableRow>
               )}
             </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TableCell colSpan={3}></TableCell>
+                <TableCell colSpan={1} className='text-end'>
+                  Total :
+                </TableCell>
+                <TableCell colSpan={1} className='text-center'>
+                  £{total && total.toFixed(2)}
+                </TableCell>
+                <TableCell colSpan={1}></TableCell>
+              </TableRow>
+            </TableFooter>
           </Table>
-          <div className='flex items-center justify-end space-x-2 py-4'>
+          <div className='flex items-center justify-end space-x-2 py-4 mr-3'>
             <Button
               variant='outline'
               size='sm'
