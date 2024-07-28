@@ -33,13 +33,15 @@ export async function GET(request: Request) {
 export type GetBalanceStatsResponseType = Awaited<
   ReturnType<typeof getBalanceStats>
 >;
+
 async function getBalanceStats(userId: string, from: Date, to: Date) {
+  const startDate = from.setDate(from.getDate() - 1);
   const totals = await prisma.transaction.groupBy({
     by: ["type"],
     where: {
       userId,
       date: {
-        gte: from,
+        gte: new Date(startDate),
         lte: to,
       },
     },

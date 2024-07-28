@@ -31,12 +31,13 @@ export type GetCategoriesStatsResponseType = Awaited<
 >;
 
 async function getCategoriesStats(userId: string, from: Date, to: Date) {
+  const startDate = from.setDate(from.getDate() - 1);
   const stats = await prisma.transaction.groupBy({
     by: ["type", "category", "categoryIcon"],
     where: {
       userId,
       date: {
-        gte: from,
+        gte: new Date(startDate),
         lte: to,
       },
     },
