@@ -35,14 +35,16 @@ export type GetBalanceStatsResponseType = Awaited<
 >;
 
 async function getBalanceStats(userId: string, from: Date, to: Date) {
-  const startDate = from.setDate(from.getDate() - 1);
+  const startDate = from.setHours(from.getHours() - 1);
+  const endDate = to.setHours(to.getHours() - 1);
+
   const totals = await prisma.transaction.groupBy({
     by: ["type"],
     where: {
       userId,
       date: {
         gte: new Date(startDate),
-        lte: to,
+        lte: new Date(endDate),
       },
     },
     _sum: {
