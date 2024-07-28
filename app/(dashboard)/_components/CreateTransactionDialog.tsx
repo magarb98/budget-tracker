@@ -55,7 +55,7 @@ function CreateTransactionDialog({ trigger, type }: Props) {
     resolver: zodResolver(CreateTransactionSchema),
     defaultValues: {
       type,
-      date: new Date(),
+      date: new Date(new Date().setUTCHours(0, 0, 0, 0)),
     },
   });
 
@@ -79,7 +79,7 @@ function CreateTransactionDialog({ trigger, type }: Props) {
         type,
         description: "",
         amount: 0,
-        date: new Date(),
+        date: new Date(new Date().setUTCHours(0, 0, 0, 0)),
         category: undefined,
       });
       queryClient.invalidateQueries({
