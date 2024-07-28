@@ -165,6 +165,11 @@ function TransactionTable({ from, to }: Props) {
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    initialState: {
+      pagination: {
+        pageSize: 100, //custom default page size
+      },
+    },
   });
 
   const categoriesOptions = useMemo(() => {
@@ -185,7 +190,7 @@ function TransactionTable({ from, to }: Props) {
       else return acc - curr.amount;
     }, 0);
     return sum;
-  }, [history.data]);
+  }, [sorting, columnFilters, categoriesOptions]);
 
   return (
     <div className='w-full'>
