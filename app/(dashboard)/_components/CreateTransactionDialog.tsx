@@ -48,14 +48,14 @@ import { Calendar } from "@/components/ui/calendar";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CreateTransaction } from "../_actions/transactions";
 import { toast } from "sonner";
-import { DateToUTCDate } from "@/lib/helpers";
+import { DateToZeroUTC } from "@/lib/helpers";
 
 function CreateTransactionDialog({ trigger, type }: Props) {
   const form = useForm<CreateTransactionSchemaType>({
     resolver: zodResolver(CreateTransactionSchema),
     defaultValues: {
       type,
-      date: new Date(new Date().setUTCHours(0, 0, 0, 0)),
+      date: new Date(),
     },
   });
 
@@ -79,7 +79,7 @@ function CreateTransactionDialog({ trigger, type }: Props) {
         type,
         description: "",
         amount: 0,
-        date: new Date(new Date().setUTCHours(0, 0, 0, 0)),
+        date: new Date(),
         category: undefined,
       });
       queryClient.invalidateQueries({
@@ -92,7 +92,7 @@ function CreateTransactionDialog({ trigger, type }: Props) {
   const onSubmit = useCallback(
     (values: CreateTransactionSchemaType) => {
       toast.loading("Creating transaction...", { id: "create-transaction" });
-      mutate({ ...values, date: DateToUTCDate(values.date) });
+      mutate({ ...values, date: DateToZeroUTC(values.date) });
     },
     [mutate]
   );

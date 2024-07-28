@@ -22,3 +22,9 @@ export function GetFormatterForCurrency(currency: string) {
     currency,
   });
 }
+
+export function DateToZeroUTC(date: Date) {
+  return new Date(
+    Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
+  );
+}
