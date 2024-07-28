@@ -2,7 +2,7 @@
 
 import { DateToUTCDate } from "@/lib/helpers";
 import { useQuery } from "@tanstack/react-query";
-import React, { useMemo, useState } from "react";
+import React, { EffectCallback, useEffect, useMemo, useState } from "react";
 import { GetTransactionHistoryResponseType } from "@/app/api/transactions-history/route";
 import {
   ColumnDef,
@@ -167,7 +167,7 @@ function TransactionTable({ from, to }: Props) {
     getPaginationRowModel: getPaginationRowModel(),
     initialState: {
       pagination: {
-        pageSize: 100, //custom default page size
+        pageSize: 25, //custom default page size
       },
     },
   });
@@ -184,13 +184,16 @@ function TransactionTable({ from, to }: Props) {
     return Array.from(uniqueCategories);
   }, [history.data]);
 
-  const total = useMemo(() => {
-    const sum = history.data?.reduce((acc, curr) => {
-      if (curr.type === "income") return acc + curr.amount;
-      else return acc - curr.amount;
-    }, 0);
-    return sum;
-  }, [sorting, columnFilters, categoriesOptions]);
+  const [total, setTotal] = useState<number>(0);
+
+  useEffect(() => {
+    const sum =
+      history.data?.reduce((acc, curr) => {
+        if (curr.type === "income") return acc + curr.amount;
+        else return acc - curr.amount;
+      }, 0) ?? 0;
+    setTotal(sum);
+  }, [history.data, sorting, columnFilters, categoriesOptions]);
 
   return (
     <div className='w-full'>
