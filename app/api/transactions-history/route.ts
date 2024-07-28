@@ -49,12 +49,13 @@ async function getTransactionsHistory(userId: string, from: Date, to: Date) {
   }
 
   const formatter = GetFormatterForCurrency(userSettings.currency);
+  const startDate = from.setDate(from.getDate() - 1);
 
   const transactions = await prisma.transaction.findMany({
     where: {
       userId,
       date: {
-        gte: from,
+        gte: new Date(startDate),
         lte: to,
       },
     },
