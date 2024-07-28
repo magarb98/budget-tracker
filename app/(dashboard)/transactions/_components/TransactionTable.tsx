@@ -167,7 +167,7 @@ function TransactionTable({ from, to }: Props) {
     getPaginationRowModel: getPaginationRowModel(),
     initialState: {
       pagination: {
-        pageSize: 25, //custom default page size
+        pageSize: 10, //custom default page size
       },
     },
   });
@@ -183,17 +183,6 @@ function TransactionTable({ from, to }: Props) {
     const uniqueCategories = new Set(categoriesMap.values());
     return Array.from(uniqueCategories);
   }, [history.data]);
-
-  const [total, setTotal] = useState<number>(0);
-
-  useEffect(() => {
-    const sum =
-      history.data?.reduce((acc, curr) => {
-        if (curr.type === "income") return acc + curr.amount;
-        else return acc - curr.amount;
-      }, 0) ?? 0;
-    setTotal(sum);
-  }, [history.data, sorting, columnFilters, categoriesOptions]);
 
   return (
     <div className='w-full'>
@@ -290,18 +279,6 @@ function TransactionTable({ from, to }: Props) {
                 </TableRow>
               )}
             </TableBody>
-            <TableFooter>
-              <TableRow>
-                <TableCell colSpan={3}></TableCell>
-                <TableCell colSpan={1} className='text-end'>
-                  Total :
-                </TableCell>
-                <TableCell colSpan={1} className='text-center'>
-                  £{total && total.toFixed(2)}
-                </TableCell>
-                <TableCell colSpan={1}></TableCell>
-              </TableRow>
-            </TableFooter>
           </Table>
           <div className='flex items-center justify-end space-x-2 py-4 mr-3'>
             <Button
